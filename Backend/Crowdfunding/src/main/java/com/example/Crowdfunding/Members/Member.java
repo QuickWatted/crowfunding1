@@ -25,6 +25,5 @@ public class Member {
     private String password;
     private String phone_number;
 
-    // Constructors, getters, setters, and other methods
 }
 

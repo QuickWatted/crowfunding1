@@ -1,6 +1,7 @@
 package com.example.Crowdfunding.Members;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,15 +11,20 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+  //  private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
+      //  this.passwordEncoder = passwordEncoder;
     }
 
-    public void createMember(Member member) {
-        memberRepository.save(member);
+    public Member createMember(Member member) {
+        // Hash the password before saving
+       // member.setPassword(passwordEncoder.encode(member.getPassword()));
+        return memberRepository.save(member);
     }
+
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -40,5 +46,23 @@ public class MemberService {
         // ... update other fields
         memberRepository.save(existingMember);
     }
+
+    //public Member loginMember(String email, String password) {
+        // Find the member by email
+      //  Member member = memberRepository.findByEmail(email);
+
+        // Check if member exists and password matches
+        //if (member != null && passwordEncoder.matches(password, member.getPassword())) {
+            // Password matches, return the authenticated member
+          //  return member;
+        //}
+
+        // Authentication failed
+        //return null;
+    //}
+        public Member loginMember(String email, String password) {
+            // In a real-world scenario, you would hash the password before querying the database
+            return memberRepository.findByEmailAndPassword(email, password);
+        }
 }
 
